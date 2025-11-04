@@ -17,14 +17,20 @@ if (!function_exists('getEnvVar')) {
 // Environment mode (production/development)
 $app_env = getEnvVar('APP_ENV', 'production');
 
-// Hata raporlama (production'da kapalı)
-if ($app_env === 'development') {
+// Hata raporlama - Debug mode kontrolü
+$debug_mode = getEnvVar('DEBUG_MODE', 'false');
+$debug_mode = ($debug_mode === 'true' || $debug_mode === true);
+
+if ($app_env === 'development' || $debug_mode) {
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
 } else {
-    error_reporting(0);
-    ini_set('display_errors', 0);
+    error_reporting(E_ALL); // Hataları görmek için açık bırak (log'a yazılır)
+    ini_set('display_errors', 0); // Ekranda gösterme
+    ini_set('display_startup_errors', 0);
     ini_set('log_errors', 1);
+    ini_set('error_log', __DIR__ . '/../logs/php_errors.log');
 }
 
 // Timezone
@@ -69,12 +75,24 @@ require_once __DIR__ . '/../includes/functions.php';
 // Ayarları veritabanından yükle
 $settings = [];
 try {
+    // Önce settings tablosunun var olup olmadığını kontrol et
+    $stmt = $pdo->query("SELECT `key`, `value` FROM settings LIMIT 1");
+    // Tablo varsa tüm ayarları yükle
     $stmt = $pdo->query("SELECT `key`, `value` FROM settings");
     while ($row = $stmt->fetch()) {
         $settings[$row['key']] = $row['value'];
     }
 } catch (PDOException $e) {
-    // Sessizce devam et
+    // Tablo yoksa veya hata varsa sessizce devam et (ilk kurulum olabilir)
+    error_log("Settings table error (may not exist yet): " . $e->getMessage());
+    // Varsayılan ayarları kullan
+    $settings = [
+        'whatsapp_number' => getEnvVar('WHATSAPP_NUMBER', '905536998982'),
+        'instagram_url' => getEnvVar('INSTAGRAM_URL', 'https://www.instagram.com/devrimsoft/'),
+        'site_title' => 'Diyetisyen Hüsna Yılmaz',
+        'site_description' => 'Alanya\'da profesyonel diyet ve beslenme danışmanlığı.',
+        'working_hours' => getEnvVar('WORKING_HOURS', 'Pazartesi - Cuma: 09:00 - 17:30 | Cumartesi: 09:00 - 14:00 | Pazar: Kapalı')
+    ];
 }
 
 // CSRF Token oluştur

@@ -6,8 +6,13 @@ $page_title = 'Ana Sayfa';
 $page_description = 'Alanya\'da profesyonel diyet ve beslenme danışmanlığı. Kişisel diyet programları, online danışmanlık.';
 $page_keywords = 'Alanya diyetisyen, Alanya sağlıklı beslenme, Alanya diyet danışmanı, beslenme uzmanı Alanya';
 
-// Analytics: Ana sayfa ziyareti kaydet
-trackPageView('ana_sayfa', $_SERVER['REQUEST_URI']);
+// Analytics: Ana sayfa ziyareti kaydet (hata olsa bile devam et)
+try {
+    trackPageView('ana_sayfa', $_SERVER['REQUEST_URI']);
+} catch (Exception $e) {
+    error_log("Analytics error: " . $e->getMessage());
+    // Analytics hatası siteyi durdurmamalı
+}
 
 // Ana sayfadaki hizmetleri getir (ilk 3)
 $stmt = $pdo->prepare("SELECT * FROM services WHERE active = 1 ORDER BY order_position ASC LIMIT 3");

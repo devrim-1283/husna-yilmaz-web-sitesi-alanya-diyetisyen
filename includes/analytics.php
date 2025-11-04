@@ -45,6 +45,11 @@ function trackPageView($pageType, $pageUrl, $blogId = null) {
             return false; // Bot trafiğini kaydetme
         }
         
+        // $pdo'nun tanımlı olduğundan emin ol
+        if (!isset($pdo) || $pdo === null) {
+            return false;
+        }
+        
         // PERFORMANCE: Non-blocking insert using prepared statement
         // Connection pool ile optimize edilmiş
         $stmt = $pdo->prepare("

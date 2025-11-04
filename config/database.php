@@ -48,6 +48,17 @@ try {
         ]
     );
 } catch (PDOException $e) {
-    die("Veritabanı bağlantısı başarısız: " . $e->getMessage());
+    // Hata mesajını logla
+    error_log("Database Connection Error: " . $e->getMessage());
+    error_log("DSN: " . $dsn);
+    error_log("User: " . DB_USER);
+    
+    // Debug mode açıksa detaylı hata göster
+    $debug_mode = getEnvVar('DEBUG_MODE', 'false');
+    if ($debug_mode === 'true' || $debug_mode === true) {
+        die("Veritabanı bağlantısı başarısız: " . $e->getMessage() . "<br>DSN: " . $dsn);
+    } else {
+        die("Veritabanı bağlantısı başarısız. Lütfen yönetici ile iletişime geçin.");
+    }
 }
 
