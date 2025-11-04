@@ -1,0 +1,14 @@
+ÖNEMLİ: Hüsna Yılmaz'ın Fotoğrafı
+
+Buraya "husna.png" adında profil fotoğrafını yükleyin.
+
+Dosya yolu: assets/img/husna.png
+
+Önerilen özellikler:
+- Format: PNG (şeffaf arka plan olabilir)
+- Boyut: 800x800px veya daha büyük (kare format ideal)
+- Kalite: Yüksek çözünürlüklü
+- Stil: Profesyonel portre fotoğrafı
+
+Not: Fotoğraf otomatik olarak responsive olacak ve yuvarlatılmış köşelerle gösterilecektir.
+

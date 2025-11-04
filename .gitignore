@@ -1,0 +1,35 @@
+# Environment
+.env
+.env.local
+.env.*.local
+!.env-example
+
+# Uploads
+assets/uploads/*
+!assets/uploads/.gitkeep
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Logs
+*.log
+
+# Database
+*.sql.gz
+*.sql.zip
+backup/
+

@@ -1,0 +1,17 @@
+# Favicon Dosyaları
+
+Favicon dosyalarını eklemek için:
+
+1. Favicon oluşturmak için online araçlar kullanın:
+   - https://favicon.io/
+   - https://realfavicongenerator.net/
+   
+2. Aşağıdaki dosyaları bu klasöre yükleyin:
+   - favicon.ico (16x16, 32x32 boyutlarında)
+   - apple-touch-icon.png (180x180 veya 192x192)
+   
+3. Veya basit bir PNG görsel oluşturup favicon.ico olarak kaydedin
+
+Geçici olarak site favicon olmadan da çalışır, sadece console'da hata gösterir.
+Bir logo hazırladığınızda favicon'a dönüştürüp bu klasöre ekleyebilirsiniz.
+

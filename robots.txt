@@ -1,0 +1,20 @@
+# robots.txt - Diyetisyen Hüsna Yılmaz
+
+User-agent: *
+Allow: /
+
+# Dizinler
+Disallow: /admin/
+Disallow: /config/
+Disallow: /includes/
+Disallow: /assets/uploads/
+
+# Dosyalar
+Disallow: /*.sql$
+Disallow: /*.md$
+Disallow: /database.sql
+Disallow: /README_KURULUM.md
+
+# Sitemap (oluşturulduğunda)
+# Sitemap: https://husnayilmaz.devrimtuncer.com/sitemap.xml
+
