@@ -1,18 +1,8 @@
 <?php
 // Genel site ayarları - Coolify uyumlu
 
-// Helper function: Environment variable'ı getir (Coolify uyumlu)
-if (!function_exists('getEnvVar')) {
-    function getEnvVar($key, $default = null) {
-        // Önce getenv() dene (Coolify'de bu kullanılır)
-        $value = getenv($key);
-        if ($value !== false) {
-            return $value;
-        }
-        // Sonra $_ENV'den dene
-        return $_ENV[$key] ?? $default;
-    }
-}
+// Veritabanı bağlantısını dahil et (getEnvVar fonksiyonu burada tanımlı)
+require_once __DIR__ . '/database.php';
 
 // Environment mode (production/development)
 $app_env = getEnvVar('APP_ENV', 'production');
@@ -62,12 +52,14 @@ $uploadDirs = [
 
 foreach ($uploadDirs as $dir) {
     if (!is_dir($dir)) {
-        mkdir($dir, 0755, true);
+        // Permission kontrolü - hata olsa bile devam et
+        @mkdir($dir, 0755, true);
+        // Hata logla ama siteyi durdurma
+        if (!is_dir($dir)) {
+            error_log("Warning: Could not create upload directory: " . $dir);
+        }
     }
 }
-
-// Veritabanı bağlantısını dahil et
-require_once __DIR__ . '/database.php';
 
 // Yardımcı fonksiyonları dahil et
 require_once __DIR__ . '/../includes/functions.php';
