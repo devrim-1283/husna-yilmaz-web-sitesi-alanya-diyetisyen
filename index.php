@@ -15,19 +15,37 @@ try {
 }
 
 // Ana sayfadaki hizmetleri getir (ilk 3)
-$stmt = $pdo->prepare("SELECT * FROM services WHERE active = 1 ORDER BY order_position ASC LIMIT 3");
-$stmt->execute();
-$services = $stmt->fetchAll();
+$services = [];
+try {
+    $stmt = $pdo->prepare("SELECT * FROM services WHERE active = 1 ORDER BY order_position ASC LIMIT 3");
+    $stmt->execute();
+    $services = $stmt->fetchAll();
+} catch (PDOException $e) {
+    error_log("Services query error: " . $e->getMessage());
+    // Tablo yoksa boş array kullan
+}
 
 // Başarı hikayelerini getir (ilk 3)
-$stmt = $pdo->prepare("SELECT * FROM success_stories WHERE active = 1 ORDER BY order_position ASC LIMIT 3");
-$stmt->execute();
-$stories = $stmt->fetchAll();
+$stories = [];
+try {
+    $stmt = $pdo->prepare("SELECT * FROM success_stories WHERE active = 1 ORDER BY order_position ASC LIMIT 3");
+    $stmt->execute();
+    $stories = $stmt->fetchAll();
+} catch (PDOException $e) {
+    error_log("Success stories query error: " . $e->getMessage());
+    // Tablo yoksa boş array kullan
+}
 
 // Son blogları getir (ilk 3)
-$stmt = $pdo->prepare("SELECT * FROM blogs WHERE active = 1 ORDER BY created_at DESC LIMIT 3");
-$stmt->execute();
-$blogs = $stmt->fetchAll();
+$blogs = [];
+try {
+    $stmt = $pdo->prepare("SELECT * FROM blogs WHERE active = 1 ORDER BY created_at DESC LIMIT 3");
+    $stmt->execute();
+    $blogs = $stmt->fetchAll();
+} catch (PDOException $e) {
+    error_log("Blogs query error: " . $e->getMessage());
+    // Tablo yoksa boş array kullan
+}
 
 // Randevu formu işleme
 $form_message = '';
@@ -38,10 +56,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_submit'])
         $message = trim($_POST['message'] ?? '');
         
         if ($name && $phone && $message) {
-            $stmt = $pdo->prepare("INSERT INTO contact_messages (name, phone, message) VALUES (?, ?, ?)");
-            if ($stmt->execute([$name, $phone, $message])) {
-                $form_message = 'success';
-            } else {
+            try {
+                $stmt = $pdo->prepare("INSERT INTO contact_messages (name, phone, message) VALUES (?, ?, ?)");
+                if ($stmt->execute([$name, $phone, $message])) {
+                    $form_message = 'success';
+                } else {
+                    $form_message = 'error';
+                }
+            } catch (PDOException $e) {
+                error_log("Contact message insert error: " . $e->getMessage());
                 $form_message = 'error';
             }
         }
