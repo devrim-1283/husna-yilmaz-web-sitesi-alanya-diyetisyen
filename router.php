@@ -18,8 +18,7 @@ $requestPath = rtrim($requestPath, '/');
 $queryString = $_SERVER['QUERY_STRING'] ?? '';
 
 // Admin panel ve process endpoint'leri direkt geç
-if (strpos($requestPath, '/hsnpanel2024secure/') === 0 || 
-    strpos($requestPath, '/admin/') === 0 ||
+if (strpos($requestPath, '/hsnpanel2024secure/') === 0 ||
     strpos($requestPath, '/process_appointment') === 0 ||
     strpos($requestPath, '/generate_sitemap') === 0 ||
     strpos($requestPath, '/reset_session') === 0) {

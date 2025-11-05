@@ -26,7 +26,7 @@ Detaylı kurulum için `README_KURULUM.md` dosyasını okuyun.
 1. Dosyaları hosting'e yükleyin
 2. `database.sql` dosyasını phpMyAdmin'de import edin
 3. `config/database.php` dosyasında veritabanı bilgilerini güncelleyin
-4. Admin paneline giriş yapın: `/admin`
+4. Admin paneline giriş yapın: `/hsnpanel2024secure/login.php`
    - Kullanıcı: `admin`
    - Şifre: `admin123` (mutlaka değiştirin!)
 

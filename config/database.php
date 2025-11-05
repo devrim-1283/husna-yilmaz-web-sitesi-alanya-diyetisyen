@@ -31,6 +31,7 @@ define('DB_USER', getEnvVar('DB_USER', 'root'));
 define('DB_PASS', getEnvVar('DB_PASS', ''));
 
 // PDO bağlantısı - Performans için optimize edildi (yüksek trafik için)
+// Türkçe karakter desteği için UTF-8 charset ayarları
 try {
     $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=utf8mb4";
     $pdo = new PDO(
@@ -47,6 +48,15 @@ try {
             PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
         ]
     );
+    
+    // Bağlantı sonrası charset ayarlarını güçlendir (Türkçe karakter desteği için)
+    $pdo->exec("SET CHARACTER SET utf8mb4");
+    $pdo->exec("SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci");
+    $pdo->exec("SET character_set_client = utf8mb4");
+    $pdo->exec("SET character_set_connection = utf8mb4");
+    $pdo->exec("SET character_set_results = utf8mb4");
+    $pdo->exec("SET collation_connection = utf8mb4_unicode_ci");
+    
 } catch (PDOException $e) {
     // Hata mesajını logla
     error_log("Database Connection Error: " . $e->getMessage());

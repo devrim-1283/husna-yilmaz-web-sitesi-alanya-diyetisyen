@@ -20,7 +20,7 @@ CREATE TABLE `admins` (
 
 -- Varsayılan admin kullanıcısı (username: admin, password: admin123)
 INSERT INTO `admins` (`username`, `password_hash`) VALUES
-('admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');
+('admin', '$2y$10$EAt0wWR3bWv67W.f9Q.wc.31uw3BoYOxdyyxLxulhxLMuACBbGexe');
 
 -- --------------------------------------------------------
 
@@ -82,10 +82,10 @@ CREATE TABLE `settings` (
 
 -- Varsayılan ayarlar (telefon numarası güncellendi: +90 553 699 89 82)
 INSERT INTO `settings` (`key`, `value`) VALUES
-('video_url', ''),
+('video_url', 'https://www.youtube.com/embed/Ff0orcFVs6s'),
 ('about_text', 'Diyetisyen Hüsna Yılmaz olarak, sağlıklı yaşam yolculuğunuzda size rehberlik etmek için buradayım.'),
 ('working_hours', 'Pzt-Cmt: 09:00-17:30 | Pzr Kapalı'),
-('instagram_url', 'https://www.instagram.com/devrimsoft/'),
+('instagram_url', 'https://www.instagram.com/dyt.husnayilmaz/'),
 ('whatsapp_number', '905536998982'),
 ('site_title', 'Diyetisyen Hüsna Yılmaz'),
 ('site_description', 'Alanya\'da profesyonel diyet ve beslenme danışmanlığı. Kişisel diyet programları, online danışmanlık.'),

@@ -21,25 +21,38 @@ require_once __DIR__ . '/includes/header.php';
         
         <div class="about-content-wrapper">
             <div class="about-video-content fade-in-left">
+                <?php 
+                // Video URL'i veritabanından çek, yoksa default kullan
+                $video_url = $settings['video_url'] ?? 'https://www.youtube.com/embed/Ff0orcFVs6s';
+                
+                // Eğer video URL boş değilse göster
+                if (!empty($video_url)):
+                ?>
                 <div class="video-wrapper">
                     <iframe 
-                        src="https://www.youtube.com/embed/Ff0orcFVs6s" 
+                        src="<?php echo clean($video_url); ?>" 
                         frameborder="0" 
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                         allowfullscreen>
                     </iframe>
                 </div>
+                <?php else: ?>
+                <div class="video-wrapper" style="background: #f0f0f0; border-radius: 15px; display: flex; align-items: center; justify-content: center; min-height: 300px;">
+                    <p style="color: var(--text-gray);">Video bulunamadı</p>
+                </div>
+                <?php endif; ?>
             </div>
             
             <div class="about-text-content fade-in-right">
                 <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 15px;">
-                    Merhaba! Ben <strong>Diyetisyen Hüsna Yılmaz</strong>. 2025 yılında Alanya Alaaddin Keykubat Üniversitesi 
-                    Beslenme ve Diyetetik bölümünden mezun oldum.
+                    Merhaba! Ben <strong>Diyetisyen Hüsna Yılmaz</strong>. 2020 yılında <strong>Ege Üniversitesi Beslenme ve Diyetetik</strong> 
+                    bölümünden mezun oldum.
                 </p>
                 
                 <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 15px;">
-                    21 yaşında, genç ve dinamik bir diyetisyen olarak, modern bilimsel yaklaşımları 
-                    doğal beslenme prensipleriyle birleştirerek sizlere hizmet veriyorum.
+                    Şu anda <strong>Alanya Alaaddin Keykubat Üniversitesi (ALKÜ)</strong> Beslenme ve Diyetetik bölümünde 
+                    <strong>tezli yüksek lisans</strong> eğitimime devam etmekteyim. Akademik çalışmalarımla mesleki 
+                    bilgilerimi sürekli geliştiriyor, en güncel bilimsel yaklaşımları danışanlarımla buluşturuyorum.
                 </p>
                 
                 <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 15px;">
@@ -50,17 +63,18 @@ require_once __DIR__ . '/includes/header.php';
                 
                 <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 25px;">
                     Alanya'da profesyonel diyet ve beslenme danışmanlığı hizmeti sunuyorum. 
-                    Sürdürülebilir ve sağlıklı yaşam tarzı değişiklikleri için yanınızdayım.
+                    Modern bilimsel yaklaşımları doğal beslenme prensipleriyle birleştirerek, sürdürülebilir 
+                    ve sağlıklı yaşam tarzı değişiklikleri için yanınızdayım.
                 </p>
                 
                 <div class="about-highlights">
                     <div class="highlight-item">
                         <i class="fas fa-graduation-cap"></i>
-                        <span>ALKÜ Beslenme ve Diyetetik</span>
+                        <span>Ege Üniversitesi Mezunu</span>
                     </div>
                     <div class="highlight-item">
-                        <i class="fas fa-calendar-alt"></i>
-                        <span>2025 Mezunu</span>
+                        <i class="fas fa-user-graduate"></i>
+                        <span>ALKÜ Yüksek Lisans</span>
                     </div>
                     <div class="highlight-item">
                         <i class="fas fa-map-marker-alt"></i>

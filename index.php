@@ -19,8 +19,7 @@ if (preg_match('/\.(jpg|jpeg|png|gif|ico|css|js|svg|woff|woff2|ttf|eot|webp|xml|
 }
 
 // Admin panel ve process endpoint'leri - bunlar da Traefik tarafından handle edilmeli
-if (strpos($requestPath, '/hsnpanel2024secure/') === 0 || 
-    strpos($requestPath, '/admin/') === 0 ||
+if (strpos($requestPath, '/hsnpanel2024secure/') === 0 ||
     strpos($requestPath, '/process_appointment') === 0 ||
     strpos($requestPath, '/generate_sitemap') === 0 ||
     strpos($requestPath, '/reset_session') === 0 ||
@@ -162,25 +161,27 @@ require_once __DIR__ . '/includes/header.php';
                 <h2>Beni Tanıyın</h2>
                 <p class="intro-lead">Merhaba! Ben Diyetisyen Hüsna Yılmaz</p>
                 <p>
-                    2025 yılında Alanya Alaaddin Keykubat Üniversitesi Beslenme ve Diyetetik bölümünden mezun oldum. 
-                    21 yaşında, genç ve dinamik bir diyetisyen olarak sizlere hizmet veriyorum.
+                    2020 yılında <strong>Ege Üniversitesi Beslenme ve Diyetetik</strong> bölümünden mezun oldum. 
+                    Şu anda <strong>Alanya Alaaddin Keykubat Üniversitesi (ALKÜ)</strong> Beslenme ve Diyetetik bölümünde 
+                    <strong>tezli yüksek lisans</strong> eğitimime devam etmekteyim.
                 </p>
                 <p>
                     Sağlıklı beslenmenin sadece kilo vermek değil, yaşam kalitesini artırmak olduğuna inanıyorum. 
                     Her bireyin kendine özgü ihtiyaçları olduğunu bilerek, kişiye özel beslenme programları hazırlıyorum.
                 </p>
                 <p>
-                    Modern bilimsel yaklaşımları doğal beslenme prensipleriyle birleştirerek, sürdürülebilir 
-                    ve sağlıklı yaşam tarzı değişiklikleri için yanınızdayım.
+                    Akademik çalışmalarımla mesleki bilgilerimi sürekli geliştiriyor, modern bilimsel yaklaşımları 
+                    doğal beslenme prensipleriyle birleştirerek, sürdürülebilir ve sağlıklı yaşam tarzı değişiklikleri 
+                    için yanınızdayım.
                 </p>
                 <div class="about-highlights">
                     <div class="highlight-item">
                         <i class="fas fa-graduation-cap"></i>
-                        <span>ALKÜ Beslenme ve Diyetetik</span>
+                        <span>Ege Üniversitesi Mezunu</span>
                     </div>
                     <div class="highlight-item">
-                        <i class="fas fa-calendar-alt"></i>
-                        <span>2025 Mezunu</span>
+                        <i class="fas fa-user-graduate"></i>
+                        <span>ALKÜ Yüksek Lisans</span>
                     </div>
                     <div class="highlight-item">
                         <i class="fas fa-map-marker-alt"></i>
@@ -517,9 +518,9 @@ require_once __DIR__ . '/includes/header.php';
             <p>Bize ulaşın, sağlıklı yaşam yolculuğunuzda yanınızdayız</p>
         </div>
         
-        <div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; max-width: 1200px; margin: 0 auto;">
+        <div class="contact-preview-wrapper" style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; max-width: 1200px; margin: 0 auto;">
             <!-- Sol Taraf: Harita -->
-            <div class="fade-in-left" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);">
+            <div class="contact-map fade-in-left" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);">
                 <iframe 
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3205.441130387499!2d32.000434!3d36.543475199999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14dc996cca53536d%3A0xafb7006971068a25!2zRGl5ZXRpc3llbiBIw7xzbmEgWcSxbG1heiBCZXNsZW5tZSBEYW7EscWfbWFubMSxayBNZXJrZXpp!5e0!3m2!1str!2str!4v1761087215309!5m2!1str!2str"
                     style="width: 100%; height: 500px; border: 0;"
@@ -530,9 +531,9 @@ require_once __DIR__ . '/includes/header.php';
             </div>
             
             <!-- Sağ Taraf: İletişim Bilgileri -->
-            <div class="fade-in-right" style="display: flex; flex-direction: column; gap: 20px;">
+            <div class="contact-info-wrapper fade-in-right" style="display: flex; flex-direction: column; gap: 20px;">
                 <!-- İletişim Kartları -->
-                <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
+                <div class="contact-cards-grid" style="display: grid; grid-template-columns: 1fr; gap: 15px;">
                     <!-- Telefon -->
                     <a href="tel:+905536998982" style="text-decoration: none;">
                         <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); transition: all 0.3s ease; display: flex; align-items: center; gap: 15px; height: 100%;" class="hover-card">
@@ -547,15 +548,17 @@ require_once __DIR__ . '/includes/header.php';
                     </a>
                     
                     <!-- Adres -->
-                    <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); transition: all 0.3s ease; display: flex; align-items: center; gap: 15px;" class="hover-card">
-                        <div style="width: 50px; height: 50px; min-width: 50px; background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                            <i class="fas fa-map-marker-alt" style="font-size: 20px; color: white;"></i>
+                    <a href="https://maps.app.goo.gl/A2TD94jUF7dr514F6" target="_blank" style="text-decoration: none;" class="address-card-mobile">
+                        <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); transition: all 0.3s ease; display: flex; align-items: center; gap: 15px; height: 100%;" class="hover-card">
+                            <div style="width: 50px; height: 50px; min-width: 50px; background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-map-marker-alt" style="font-size: 20px; color: white;"></i>
+                            </div>
+                            <div>
+                                <h4 style="color: var(--primary-green); margin: 0 0 5px 0; font-size: 1rem;">Adres</h4>
+                                <p style="color: var(--text-gray); margin: 0; font-size: 0.9rem;">Alanya, Antalya</p>
+                            </div>
                         </div>
-                        <div>
-                            <h4 style="color: var(--primary-green); margin: 0 0 5px 0; font-size: 1rem;">Adres</h4>
-                            <p style="color: var(--text-gray); margin: 0; font-size: 0.9rem;">Alanya, Antalya</p>
-                        </div>
-                    </div>
+                    </a>
                     
                     <!-- E-posta -->
                     <a href="mailto:destek@husnayilmaz.com" style="text-decoration: none;">
@@ -620,6 +623,53 @@ require_once __DIR__ . '/includes/header.php';
 .btn-sm {
     padding: 8px 20px;
     font-size: 14px;
+}
+
+/* Mobil için İletişim Bölümü Düzenlemeleri */
+@media (max-width: 768px) {
+    .contact-preview-wrapper {
+        grid-template-columns: 1fr !important;
+        gap: 30px !important;
+        max-width: 100% !important;
+        margin: 0 auto !important;
+        padding: 0 15px;
+    }
+    
+    .contact-info-wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 auto !important;
+    }
+    
+    .contact-cards-grid {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 auto !important;
+    }
+    
+    /* Konum kartını mobilde gizle (ilk contact-info-cards bölümünde) */
+    .contact-info-cards .contact-card.location-icon {
+        display: none !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .contact-preview-wrapper {
+        padding: 0 10px;
+    }
+    
+    .contact-map {
+        border-radius: 15px !important;
+    }
+    
+    .contact-map iframe {
+        height: 350px !important;
+    }
+    
+    .contact-cards-grid > * {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
 }
 </style>
 

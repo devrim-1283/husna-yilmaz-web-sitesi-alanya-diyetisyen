@@ -111,5 +111,159 @@ require_once __DIR__ . '/includes/header.php';
     </form>
 </div>
 
+<!-- Database Backup Section -->
+<div class="card" style="margin-top: 30px;">
+    <div class="card-header">
+        <h2 class="card-title">Veritabanı Yedekleme</h2>
+    </div>
+    <div class="card-body">
+        <p style="margin-bottom: 20px; color: var(--text-gray);">
+            Tüm veritabanınızı SQL dosyası olarak yedekleyebilirsiniz. Bu işlem tüm tabloları ve verilerini içerir.
+        </p>
+        
+        <!-- Progress Bar Container -->
+        <div id="backupProgressContainer" style="display: none; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span id="backupProgressText" style="font-weight: 600; color: var(--primary);">Yedekleme başlatılıyor...</span>
+                <span id="backupProgressPercent" style="font-weight: 600; color: var(--primary);">0%</span>
+            </div>
+            <div style="width: 100%; height: 25px; background: #e0e0e0; border-radius: 12px; overflow: hidden;">
+                <div id="backupProgressBar" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary-green) 0%, var(--light-green) 100%); transition: width 0.3s ease; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 600;">
+                </div>
+            </div>
+        </div>
+        
+        <button id="backupBtn" class="btn btn-primary" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);">
+            <i class="fas fa-database"></i>
+            Veritabanını Yedekle
+        </button>
+    </div>
+</div>
+
+<script>
+document.getElementById('backupBtn').addEventListener('click', function() {
+    const btn = this;
+    const progressContainer = document.getElementById('backupProgressContainer');
+    const progressBar = document.getElementById('backupProgressBar');
+    const progressText = document.getElementById('backupProgressText');
+    const progressPercent = document.getElementById('backupProgressPercent');
+    
+    // Disable button
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Yedekleniyor...';
+    
+    // Show progress
+    progressContainer.style.display = 'block';
+    progressBar.style.width = '0%';
+    progressPercent.textContent = '0%';
+    progressText.textContent = 'Yedekleme başlatılıyor...';
+    
+    // CSRF token
+    const csrfToken = '<?php echo $_SESSION['csrf_token']; ?>';
+    
+    // Start backup
+    const xhr = new XMLHttpRequest();
+    let lastProgress = 0;
+    
+    xhr.open('GET', 'backup_database.php?token=' + encodeURIComponent(csrfToken), true);
+    xhr.responseType = 'blob';
+    
+    xhr.onprogress = function(e) {
+        if (e.lengthComputable && e.total > 0) {
+            const percent = Math.min(Math.round((e.loaded / e.total) * 100), 100);
+            if (percent > lastProgress) {
+                lastProgress = percent;
+                progressBar.style.width = percent + '%';
+                progressPercent.textContent = percent + '%';
+                
+                // Progress text mesajları - simulated progress
+                if (percent < 10) {
+                    progressText.textContent = 'Veritabanı bağlantısı kuruluyor...';
+                } else if (percent < 30) {
+                    progressText.textContent = 'Tablo yapıları export ediliyor...';
+                } else if (percent < 60) {
+                    progressText.textContent = 'Veriler export ediliyor...';
+                } else if (percent < 85) {
+                    progressText.textContent = 'SQL dosyası oluşturuluyor...';
+                } else if (percent < 95) {
+                    progressText.textContent = 'Dosya hazırlanıyor...';
+                } else {
+                    progressText.textContent = 'Yedekleme tamamlandı! Dosya indiriliyor...';
+                }
+            }
+        } else {
+            // Length not computable - simulate progress
+            if (lastProgress < 10) {
+                lastProgress = 10;
+                progressBar.style.width = '10%';
+                progressPercent.textContent = '10%';
+                progressText.textContent = 'Veritabanı bağlantısı kuruluyor...';
+            } else if (lastProgress < 50) {
+                lastProgress += 5;
+                progressBar.style.width = lastProgress + '%';
+                progressPercent.textContent = lastProgress + '%';
+                progressText.textContent = 'Tablo yapıları export ediliyor...';
+            } else if (lastProgress < 90) {
+                lastProgress += 3;
+                progressBar.style.width = lastProgress + '%';
+                progressPercent.textContent = lastProgress + '%';
+                progressText.textContent = 'Veriler export ediliyor...';
+            }
+        }
+    };
+    
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            progressBar.style.width = '100%';
+            progressPercent.textContent = '100%';
+            progressText.textContent = 'Yedekleme başarıyla tamamlandı!';
+            
+            // Download file
+            const blob = xhr.response;
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            
+            // Get filename from Content-Disposition header
+            const contentDisposition = xhr.getResponseHeader('Content-Disposition');
+            let filename = 'backup_' + new Date().getTime() + '.sql';
+            if (contentDisposition) {
+                const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+                if (filenameMatch) {
+                    filename = filenameMatch[1];
+                }
+            }
+            
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            
+            // Reset after 3 seconds
+            setTimeout(function() {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-database"></i> Veritabanını Yedekle';
+                progressContainer.style.display = 'none';
+            }, 3000);
+        } else {
+            progressText.textContent = 'Hata: Yedekleme başarısız oldu!';
+            progressBar.style.background = '#dc3545';
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-database"></i> Veritabanını Yedekle';
+        }
+    };
+    
+    xhr.onerror = function() {
+        progressText.textContent = 'Hata: Bağlantı hatası!';
+        progressBar.style.background = '#dc3545';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-database"></i> Veritabanını Yedekle';
+    };
+    
+    xhr.send();
+});
+</script>
+
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
 

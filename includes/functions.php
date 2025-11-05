@@ -180,7 +180,7 @@ function isAdmin() {
  */
 function requireAdmin() {
     if (!isAdmin()) {
-        header('Location: /admin/login.php');
+        header('Location: /hsnpanel2024secure/login.php');
         exit;
     }
 }
