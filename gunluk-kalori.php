@@ -2,7 +2,6 @@
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/includes/analytics.php';
 
-// Analytics: Günlük Kalori aracı ziyareti kaydet
 trackPageView('tool_kalori', $_SERVER['REQUEST_URI']);
 
 $page_title = 'Günlük Kalori İhtiyacı Hesaplama';
