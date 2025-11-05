@@ -21,26 +21,11 @@ require_once __DIR__ . '/includes/header.php';
         
         <div class="about-content-wrapper">
             <div class="about-video-content fade-in-left">
-                <?php 
-                // Video URL'i veritabanından çek, yoksa default kullan
-                $video_url = $settings['video_url'] ?? 'https://www.youtube.com/embed/Ff0orcFVs6s';
-                
-                // Eğer video URL boş değilse göster
-                if (!empty($video_url)):
-                ?>
-                <div class="video-wrapper">
-                    <iframe 
-                        src="<?php echo clean($video_url); ?>" 
-                        frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen>
-                    </iframe>
+                <div class="video-wrapper" style="border-radius: 15px; overflow: hidden; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);">
+                    <img src="<?php echo imageUrl('assets/img/husna2.jpg'); ?>" 
+                         alt="Diyetisyen Hüsna Yılmaz" 
+                         style="width: 100%; height: auto; display: block; object-fit: cover;">
                 </div>
-                <?php else: ?>
-                <div class="video-wrapper" style="background: #f0f0f0; border-radius: 15px; display: flex; align-items: center; justify-content: center; min-height: 300px;">
-                    <p style="color: var(--text-gray);">Video bulunamadı</p>
-                </div>
-                <?php endif; ?>
             </div>
             
             <div class="about-text-content fade-in-right">
