@@ -273,12 +273,12 @@ require_once __DIR__ . '/includes/header.php';
                 <tr>
                     <td>
                         <?php if ($story['before_image']): ?>
-                            <img src="/assets/<?php echo clean($story['before_image']); ?>" alt="">
+                            <img src="<?php echo imageUrl('assets/' . $story['before_image']); ?>" alt="" style="width: 80px; height: 60px; object-fit: cover; border-radius: 8px;">
                         <?php endif; ?>
                     </td>
                     <td>
                         <?php if ($story['after_image']): ?>
-                            <img src="/assets/<?php echo clean($story['after_image']); ?>" alt="">
+                            <img src="<?php echo imageUrl('assets/' . $story['after_image']); ?>" alt="" style="width: 80px; height: 60px; object-fit: cover; border-radius: 8px;">
                         <?php endif; ?>
                     </td>
                     <td><?php echo clean($story['title']); ?></td>

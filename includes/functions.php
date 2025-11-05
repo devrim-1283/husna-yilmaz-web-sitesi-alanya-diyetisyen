@@ -255,7 +255,8 @@ function slugify($text) {
 
 /**
  * Cache-busting ile resim/CSS/JS URL'i oluştur
- * Deploy sonrası cache sorununu önlemek için filemtime + hash kullanır
+ * Deploy sonrası cache sorununu önlemek için filemtime + hash + file size kullanır
+ * Yeni upload edilen resimler için cache'i bypass eder
  * 
  * @param string $path Asset dosya yolu (örn: 'assets/img/image.jpg' veya '/assets/css/style.css')
  * @return string Cache-busting parametresi ile URL
@@ -267,11 +268,13 @@ function imageUrl($path) {
     // Dosya yolu oluştur
     $filePath = __DIR__ . '/../' . $path;
     
-    // Dosya varsa filemtime ve hash kullan
+    // Dosya varsa filemtime, hash ve file size kullan (daha güçlü cache-busting)
     if (file_exists($filePath)) {
-        $mtime = filemtime($filePath);
-        $hash = substr(md5_file($filePath), 0, 8); // İlk 8 karakter hash
-        return '/' . $path . '?v=' . $mtime . '-' . $hash;
+        $mtime = filemtime($filePath); // Dosya değişiklik zamanı
+        $hash = substr(md5_file($filePath), 0, 12); // İlk 12 karakter hash (daha güçlü)
+        $size = filesize($filePath); // Dosya boyutu (yeni upload için)
+        // Timestamp + hash + size kombinasyonu ile maksimum cache-busting
+        return '/' . $path . '?v=' . $mtime . '-' . $hash . '-' . $size;
     }
     
     // Dosya yoksa normal URL döndür (cache-busting olmadan)

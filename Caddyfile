@@ -16,10 +16,16 @@
         path /hsnpanel2024secure/*
     }
     
-    # Handle static files
+    # Handle static files - query string ile cache-busting
     handle @static {
         file_server
+        # Query string varsa cache'i bypass et, yoksa uzun cache
         header Cache-Control "public, max-age=31536000, immutable"
+        # Query string ile isteklerde cache'i bypass et (imageUrl() fonksiyonu query string ekliyor)
+        @has_query {
+            query *
+        }
+        header @has_query Cache-Control "public, max-age=0, must-revalidate"
     }
     
     # Handle admin panel

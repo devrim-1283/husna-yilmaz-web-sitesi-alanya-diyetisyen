@@ -209,7 +209,7 @@ require_once __DIR__ . '/includes/header.php';
                 <tr>
                     <td>
                         <?php if ($blog['image']): ?>
-                            <img src="/assets/<?php echo clean($blog['image']); ?>?v=<?php echo time(); ?>" 
+                            <img src="<?php echo imageUrl('assets/' . $blog['image']); ?>" 
                                  alt="<?php echo clean($blog['title']); ?>" 
                                  style="width: 80px; height: 60px; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                         <?php else: ?>
