@@ -1,19 +1,50 @@
 # Caddyfile for Coolify
-# Not: Coolify container labels kullanıyorsa bu dosya kullanılmaz
-# Bu dosya sadece referans için
+# This file is automatically used by Coolify when Caddy is selected
 
-https://alanyadiyetisyen.com.tr {
-    encode zstd gzip
+# Default site - catch all
+:80 {
+    root * /app
     
-    # Hide server header
-    header -Server
+    # Static files
+    @static {
+        path *.jpg *.jpeg *.png *.gif *.ico *.css *.js *.svg *.woff *.woff2 *.ttf *.eot *.webp *.xml *.txt *.pdf
+        path /assets/*
+    }
     
-    # Reverse proxy to PHP server on port 3000
-    handle_path /* {
+    # Admin panel
+    @admin {
+        path /hsnpanel2024secure/*
+    }
+    
+    # Handle static files
+    handle @static {
+        file_server
+        header Cache-Control "public, max-age=31536000, immutable"
+    }
+    
+    # Handle admin panel
+    handle @admin {
+        try_files {path} {path}/ /hsnpanel2024secure/index.php
         reverse_proxy localhost:3000
     }
     
-    # Try files for clean URLs
-    try_files {path} /index.php /index.html
+    # Handle clean URLs - route to index.php
+    handle {
+        try_files {path} /index.php
+        reverse_proxy localhost:3000
+    }
 }
+
+# Security headers
+header {
+    X-Frame-Options "SAMEORIGIN"
+    X-Content-Type-Options "nosniff"
+    X-XSS-Protection "1; mode=block"
+    Referrer-Policy "strict-origin-when-cross-origin"
+    Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    -Server
+}
+
+# Compression
+encode zstd gzip
 
