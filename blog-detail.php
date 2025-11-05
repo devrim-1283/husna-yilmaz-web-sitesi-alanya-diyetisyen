@@ -77,16 +77,22 @@ require_once __DIR__ . '/includes/header.php';
         <!-- Share Buttons -->
         <div class="share-section fade-in-up">
             <h3><i class="fas fa-share-alt"></i> Bu yazıyı paylaşın</h3>
+            <?php
+            // Mevcut domain'i kullanarak tam URL oluştur (eski domain sorununu önler)
+            $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+            $current_domain = $protocol . $_SERVER['HTTP_HOST'];
+            $share_url = $current_domain . $_SERVER['REQUEST_URI'];
+            ?>
             <div class="share-buttons">
-                <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode(SITE_URL . $_SERVER['REQUEST_URI']); ?>" 
+                <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode($share_url); ?>" 
                    target="_blank" class="share-btn facebook-btn">
                     <i class="fab fa-facebook-f"></i> Facebook
                 </a>
-                <a href="https://twitter.com/intent/tweet?url=<?php echo urlencode(SITE_URL . $_SERVER['REQUEST_URI']); ?>&text=<?php echo urlencode($blog['title']); ?>" 
+                <a href="https://twitter.com/intent/tweet?url=<?php echo urlencode($share_url); ?>&text=<?php echo urlencode($blog['title']); ?>" 
                    target="_blank" class="share-btn twitter-btn">
                     <i class="fab fa-twitter"></i> Twitter
                 </a>
-                <a href="https://wa.me/?text=<?php echo urlencode($blog['title'] . ' - ' . SITE_URL . $_SERVER['REQUEST_URI']); ?>" 
+                <a href="https://wa.me/?text=<?php echo urlencode($blog['title'] . ' - ' . $share_url); ?>" 
                    target="_blank" class="share-btn whatsapp-btn">
                     <i class="fab fa-whatsapp"></i> WhatsApp
                 </a>

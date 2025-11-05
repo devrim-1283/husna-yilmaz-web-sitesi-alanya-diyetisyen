@@ -8,10 +8,31 @@ trackPageView('basari_hikayeleri', $_SERVER['REQUEST_URI']);
 $page_title = 'Başarı Hikayeleri';
 $page_description = 'Diyetisyen Hüsna Yılmaz ile hedeflerine ulaşan danışanların başarı hikayeleri.';
 
-// Tüm aktif başarı hikayelerini getir
-$stmt = $pdo->prepare("SELECT * FROM success_stories WHERE active = 1 ORDER BY order_position ASC");
-$stmt->execute();
-$stories = $stmt->fetchAll();
+// Pagination
+$per_page = 9;
+$current_page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+
+// Toplam başarı hikayesi sayısı
+try {
+    $count_stmt = $pdo->prepare("SELECT COUNT(*) FROM success_stories WHERE active = 1");
+    $count_stmt->execute();
+    $total_stories = $count_stmt->fetchColumn();
+} catch (PDOException $e) {
+    error_log("Error counting success stories: " . $e->getMessage());
+    $total_stories = 0;
+}
+
+$pagination = paginate($total_stories, $per_page, $current_page);
+
+// Başarı hikayelerini getir
+try {
+    $stmt = $pdo->prepare("SELECT * FROM success_stories WHERE active = 1 ORDER BY order_position ASC LIMIT ? OFFSET ?");
+    $stmt->execute([$pagination['per_page'], $pagination['offset']]);
+    $stories = $stmt->fetchAll();
+} catch (PDOException $e) {
+    error_log("Error fetching success stories: " . $e->getMessage());
+    $stories = [];
+}
 
 require_once __DIR__ . '/includes/header.php';
 ?>
@@ -79,6 +100,27 @@ require_once __DIR__ . '/includes/header.php';
                 </a>
                 <?php endforeach; ?>
             </div>
+            
+            <!-- Pagination -->
+            <?php if ($pagination['total_pages'] > 1): ?>
+            <div class="pagination fade-in-up">
+                <?php if ($current_page > 1): ?>
+                    <a href="?page=<?php echo $current_page - 1; ?>"><i class="fas fa-chevron-left"></i> Önceki</a>
+                <?php endif; ?>
+                
+                <?php for ($i = 1; $i <= $pagination['total_pages']; $i++): ?>
+                    <?php if ($i == $current_page): ?>
+                        <span class="active"><?php echo $i; ?></span>
+                    <?php else: ?>
+                        <a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                    <?php endif; ?>
+                <?php endfor; ?>
+                
+                <?php if ($current_page < $pagination['total_pages']): ?>
+                    <a href="?page=<?php echo $current_page + 1; ?>">Sonraki <i class="fas fa-chevron-right"></i></a>
+                <?php endif; ?>
+            </div>
+            <?php endif; ?>
         <?php else: ?>
             <div class="text-center fade-in-up">
                 <i class="fas fa-trophy" style="font-size: 4rem; color: var(--primary-green); margin-bottom: 20px; opacity: 0.5;"></i>

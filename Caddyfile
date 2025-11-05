@@ -1,0 +1,19 @@
+# Caddyfile for Coolify
+# Not: Coolify container labels kullanıyorsa bu dosya kullanılmaz
+# Bu dosya sadece referans için
+
+https://alanyadiyetisyen.com.tr {
+    encode zstd gzip
+    
+    # Hide server header
+    header -Server
+    
+    # Reverse proxy to PHP container on port 3000
+    handle_path /* {
+        reverse_proxy localhost:3000
+    }
+    
+    # Try files for clean URLs
+    try_files {path} /index.php /index.html
+}
+

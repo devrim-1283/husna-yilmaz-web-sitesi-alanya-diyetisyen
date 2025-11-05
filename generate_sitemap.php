@@ -34,7 +34,7 @@ if (!function_exists('getEnvVar')) {
 }
 
 // Site bilgileri - Coolify environment variable'larından al
-$siteUrl = getEnvVar('SITE_URL', 'https://alanyadiyetisyen.com.tr');
+$siteUrl = getEnvVar('SITE_URL', 'https://husnayilmaz.com');
 $siteUrl = rtrim($siteUrl, '/');
 
 // Sitemap XML başlat
