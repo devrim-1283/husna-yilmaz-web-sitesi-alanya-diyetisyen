@@ -1,0 +1,25 @@
+TRAEFIK LABELS (Clean URL Routing ile):
+
+traefik.enable=true
+
+traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+
+traefik.http.middlewares.rewrite-to-index.rewrite.path=/index.php
+
+traefik.http.routers.http-0-ew8o4k44w0k00wwk4cgkkwgc.entryPoints=http
+traefik.http.routers.http-0-ew8o4k44w0k00wwk4cgkkwgc.middlewares=redirect-to-https
+traefik.http.routers.http-0-ew8o4k44w0k00wwk4cgkkwgc.rule=Host(`alanyadiyetisyen.com.tr`)
+traefik.http.routers.http-0-ew8o4k44w0k00wwk4cgkkwgc.service=http-0-ew8o4k44w0k00wwk4cgkkwgc
+
+traefik.http.routers.https-0-ew8o4k44w0k00wwk4cgkkwgc.entryPoints=https
+traefik.http.routers.https-0-ew8o4k44w0k00wwk4cgkkwgc.middlewares=rewrite-to-index
+traefik.http.routers.https-0-ew8o4k44w0k00wwk4cgkkwgc.rule=Host(`alanyadiyetisyen.com.tr`)
+traefik.http.routers.https-0-ew8o4k44w0k00wwk4cgkkwgc.service=https-0-ew8o4k44w0k00wwk4cgkkwgc
+traefik.http.routers.https-0-ew8o4k44w0k00wwk4cgkkwgc.tls.certresolver=letsencrypt
+traefik.http.routers.https-0-ew8o4k44w0k00wwk4cgkkwgc.tls=true
+
+traefik.http.services.http-0-ew8o4k44w0k00wwk4cgkkwgc.loadbalancer.server.port=3000
+traefik.http.services.https-0-ew8o4k44w0k00wwk4cgkkwgc.loadbalancer.server.port=3000
+
+NOT: Bu tüm istekleri index.php'ye yönlendirir. Ama static dosyalar için sorun olabilir.
+

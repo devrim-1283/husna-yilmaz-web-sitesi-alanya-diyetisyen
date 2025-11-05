@@ -1,0 +1,31 @@
+Traefik Label'ları (Clean URL Routing ile):
+
+traefik.enable=true
+
+traefik.http.middlewares.gzip.compress=true
+
+traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+
+traefik.http.middlewares.rewrite.replacepathregex.regex=^/(?!assets|hsnpanel2024secure|admin|process_appointment|generate_sitemap|reset_session|index\.php|.*\.php|.*\.(jpg|jpeg|png|gif|ico|css|js|svg|woff|woff2|ttf|eot|webp|xml|txt|pdf)).*$
+traefik.http.middlewares.rewrite.replacepathregex.replacement=/index.php
+
+traefik.http.routers.http-0-ew8o4k44w0k00wwk4cgkkwgc.entryPoints=http
+traefik.http.routers.http-0-ew8o4k44w0k00wwk4cgkkwgc.middlewares=redirect-to-https
+traefik.http.routers.http-0-ew8o4k44w0k00wwk4cgkkwgc.rule=Host(`alanyadiyetisyen.com.tr`) && PathPrefix(`/`)
+traefik.http.routers.http-0-ew8o4k44w0k00wwk4cgkkwgc.service=http-0-ew8o4k44w0k00wwk4cgkkwgc
+
+traefik.http.routers.https-0-ew8o4k44w0k00wwk4cgkkwgc.entryPoints=https
+traefik.http.routers.https-0-ew8o4k44w0k00wwk4cgkkwgc.middlewares=gzip,rewrite
+traefik.http.routers.https-0-ew8o4k44w0k00wwk4cgkkwgc.rule=Host(`alanyadiyetisyen.com.tr`) && PathPrefix(`/`)
+traefik.http.routers.https-0-ew8o4k44w0k00wwk4cgkkwgc.service=https-0-ew8o4k44w0k00wwk4cgkkwgc
+traefik.http.routers.https-0-ew8o4k44w0k00wwk4cgkkwgc.tls.certresolver=letsencrypt
+traefik.http.routers.https-0-ew8o4k44w0k00wwk4cgkkwgc.tls=true
+
+traefik.http.services.http-0-ew8o4k44w0k00wwk4cgkkwgc.loadbalancer.server.port=3000
+traefik.http.services.https-0-ew8o4k44w0k00wwk4cgkkwgc.loadbalancer.server.port=3000
+
+ÖNEMLİ:
+- ew8o4k44w0k00wwk4cgkkwgc kısmını kendi container ID'nizle değiştirin
+- rewrite middleware clean URL'leri index.php'ye yönlendiriyor
+- Static dosyalar (assets, images, css, js) direkt geçiriliyor
+

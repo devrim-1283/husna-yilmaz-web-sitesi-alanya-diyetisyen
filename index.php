@@ -4,12 +4,34 @@
  * For clean URLs, router.php handles routing
  */
 
-// Router support for clean URLs (only if not root path)
+// Router support for clean URLs - ALWAYS check (for Traefik/Caddy)
 $requestPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $requestPath = rtrim($requestPath, '/');
 
-if ($requestPath !== '' && $requestPath !== '/' && $requestPath !== '/index.php') {
-    // Check if router exists and handle clean URLs
+// Static dosyaları kontrol et (images, css, js, etc.) - eğer static dosya ise 404
+if (preg_match('/\.(jpg|jpeg|png|gif|ico|css|js|svg|woff|woff2|ttf|eot|webp|xml|txt|pdf)$/i', $requestPath)) {
+    http_response_code(404);
+    require_once __DIR__ . '/404.php';
+    exit;
+}
+
+// Admin panel ve process endpoint'leri direkt geç - 404
+if (strpos($requestPath, '/hsnpanel2024secure/') === 0 || 
+    strpos($requestPath, '/admin/') === 0 ||
+    strpos($requestPath, '/process_appointment') === 0 ||
+    strpos($requestPath, '/generate_sitemap') === 0 ||
+    strpos($requestPath, '/reset_session') === 0 ||
+    strpos($requestPath, '/assets/') === 0) {
+    http_response_code(404);
+    require_once __DIR__ . '/404.php';
+    exit;
+}
+
+// Root path veya index.php ise devam et
+if ($requestPath === '' || $requestPath === '/' || $requestPath === '/index.php') {
+    // Continue to normal index.php processing
+} else {
+    // Clean URL - check router
     if (file_exists(__DIR__ . '/router.php')) {
         $routerHandled = require_once __DIR__ . '/router.php';
         if ($routerHandled === true) {

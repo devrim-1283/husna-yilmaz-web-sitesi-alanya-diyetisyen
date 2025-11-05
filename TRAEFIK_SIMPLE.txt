@@ -1,0 +1,25 @@
+ÖNCE BUNLARI EKLEYİN (Middleware olmadan):
+
+traefik.enable=true
+
+traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+
+traefik.http.routers.http-0-ew8o4k44w0k00wwk4cgkkwgc.entryPoints=http
+traefik.http.routers.http-0-ew8o4k44w0k00wwk4cgkkwgc.middlewares=redirect-to-https
+traefik.http.routers.http-0-ew8o4k44w0k00wwk4cgkkwgc.rule=Host(`alanyadiyetisyen.com.tr`)
+traefik.http.routers.http-0-ew8o4k44w0k00wwk4cgkkwgc.service=http-0-ew8o4k44w0k00wwk4cgkkwgc
+
+traefik.http.routers.https-0-ew8o4k44w0k00wwk4cgkkwgc.entryPoints=https
+traefik.http.routers.https-0-ew8o4k44w0k00wwk4cgkkwgc.rule=Host(`alanyadiyetisyen.com.tr`)
+traefik.http.routers.https-0-ew8o4k44w0k00wwk4cgkkwgc.service=https-0-ew8o4k44w0k00wwk4cgkkwgc
+traefik.http.routers.https-0-ew8o4k44w0k00wwk4cgkkwgc.tls.certresolver=letsencrypt
+traefik.http.routers.https-0-ew8o4k44w0k00wwk4cgkkwgc.tls=true
+
+traefik.http.services.http-0-ew8o4k44w0k00wwk4cgkkwgc.loadbalancer.server.port=3000
+traefik.http.services.https-0-ew8o4k44w0k00wwk4cgkkwgc.loadbalancer.server.port=3000
+
+ÖNEMLİ:
+1. ew8o4k44w0k00wwk4cgkkwgc kısmını Coolify'deki Container Name ile değiştirin
+2. Önce bunlarla deneyin, çalışırsa sonra clean URL routing ekleriz
+3. Container'ın çalıştığından emin olun (Logs'da "Server starting on port 3000" görünmeli)
+
