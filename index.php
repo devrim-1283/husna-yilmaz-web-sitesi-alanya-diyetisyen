@@ -1,4 +1,29 @@
 <?php
+/**
+ * Main Entry Point with Router Support
+ * For clean URLs, router.php handles routing
+ */
+
+// Router support for clean URLs (only if not root path)
+$requestPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$requestPath = rtrim($requestPath, '/');
+
+if ($requestPath !== '' && $requestPath !== '/' && $requestPath !== '/index.php') {
+    // Check if router exists and handle clean URLs
+    if (file_exists(__DIR__ . '/router.php')) {
+        $routerHandled = require_once __DIR__ . '/router.php';
+        if ($routerHandled === true) {
+            exit; // Router handled the request
+        }
+        // If router returned false, show 404
+        if ($routerHandled === false) {
+            http_response_code(404);
+            require_once __DIR__ . '/404.php';
+            exit;
+        }
+    }
+}
+
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/includes/analytics.php';
 

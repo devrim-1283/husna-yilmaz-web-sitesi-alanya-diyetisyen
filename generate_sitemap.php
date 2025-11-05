@@ -22,8 +22,19 @@ if (!isset($pdo) || $pdo === null) {
     die('Database connection failed!');
 }
 
-// Site bilgileri
-$siteUrl = $_ENV['SITE_URL'] ?? 'https://husnayilmaz.devrimtuncer.com';
+// Helper function: Environment variable'ı getir (Coolify uyumlu)
+if (!function_exists('getEnvVar')) {
+    function getEnvVar($key, $default = null) {
+        $value = getenv($key);
+        if ($value !== false) {
+            return $value;
+        }
+        return $_ENV[$key] ?? $default;
+    }
+}
+
+// Site bilgileri - Coolify environment variable'larından al
+$siteUrl = getEnvVar('SITE_URL', 'https://alanyadiyetisyen.com');
 $siteUrl = rtrim($siteUrl, '/');
 
 // Sitemap XML başlat
@@ -63,17 +74,27 @@ foreach ($staticPages as $page) {
 // Blog yazıları
 $blogs = [];
 try {
-    $stmt = $pdo->query("SELECT slug, created_at, updated_at FROM blogs WHERE active = 1 ORDER BY created_at DESC");
+    // Blog detay URL formatı: /blog/{id}/{slug}
+    $stmt = $pdo->query("SELECT id, title, slug, created_at, updated_at FROM blogs WHERE active = 1 ORDER BY created_at DESC");
     $blogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     foreach ($blogs as $blog) {
         $url = $xml->addChild('url');
-        $url->addChild('loc', $siteUrl . '/blog/' . urlencode($blog['slug']));
+        
+        // Blog URL formatı: /blog/{id}/{slugified-title}
+        // Slugify fonksiyonunu kullan
+        if (!function_exists('slugify')) {
+            require_once __DIR__ . '/includes/functions.php';
+        }
+        $blogSlug = !empty($blog['slug']) ? $blog['slug'] : slugify($blog['title']);
+        $blogUrl = $siteUrl . '/blog/' . $blog['id'] . '/' . $blogSlug;
+        
+        $url->addChild('loc', $blogUrl);
         $url->addChild('changefreq', 'monthly');
         $url->addChild('priority', '0.8');
         
         // Son güncelleme tarihi veya oluşturma tarihi
-        $lastmod = $blog['updated_at'] ?? $blog['created_at'];
+        $lastmod = !empty($blog['updated_at']) ? $blog['updated_at'] : $blog['created_at'];
         $url->addChild('lastmod', date('Y-m-d', strtotime($lastmod)));
     }
     
@@ -90,7 +111,14 @@ $dom->loadXML($xml->asXML());
 
 // Dosyaya yaz
 $sitemapPath = __DIR__ . '/sitemap.xml';
-file_put_contents($sitemapPath, $dom->saveXML());
+
+// Dosya yazma izni kontrolü
+$writeSuccess = @file_put_contents($sitemapPath, $dom->saveXML());
+
+if ($writeSuccess === false) {
+    error_log("Sitemap write error: Could not write to " . $sitemapPath);
+    // Hata olsa bile devam et
+}
 
 // Sadece CLI modunda veya doğrudan çağrıldığında çıktı ver
 // Admin panelden include edilirse sessiz çalış (header hatası önlenir)
