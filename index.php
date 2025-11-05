@@ -8,20 +8,25 @@
 $requestPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $requestPath = rtrim($requestPath, '/');
 
-// Static dosyaları kontrol et (images, css, js, etc.) - eğer static dosya ise 404
+// Static dosyaları ve assets klasörünü kontrol et - bunlar Traefik tarafından handle edilmeli
+// Eğer buraya geldiyse, Traefik rewrite çalışmamış demektir, direkt geç
 if (preg_match('/\.(jpg|jpeg|png|gif|ico|css|js|svg|woff|woff2|ttf|eot|webp|xml|txt|pdf)$/i', $requestPath)) {
+    // Static dosya - buraya gelmemeli, Traefik handle etmeli
+    // Eğer geldiyse, dosya yok demektir
     http_response_code(404);
     require_once __DIR__ . '/404.php';
     exit;
 }
 
-// Admin panel ve process endpoint'leri direkt geç - 404
+// Admin panel ve process endpoint'leri - bunlar da Traefik tarafından handle edilmeli
 if (strpos($requestPath, '/hsnpanel2024secure/') === 0 || 
     strpos($requestPath, '/admin/') === 0 ||
     strpos($requestPath, '/process_appointment') === 0 ||
     strpos($requestPath, '/generate_sitemap') === 0 ||
     strpos($requestPath, '/reset_session') === 0 ||
     strpos($requestPath, '/assets/') === 0) {
+    // Bu istekler Traefik tarafından direkt geçirilmeli
+    // Eğer buraya geldiyse, dosya yok demektir
     http_response_code(404);
     require_once __DIR__ . '/404.php';
     exit;
