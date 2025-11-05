@@ -8,9 +8,9 @@ https://alanyadiyetisyen.com.tr {
     # Hide server header
     header -Server
     
-    # Reverse proxy to PHP-FPM container on port 8000
+    # Reverse proxy to PHP server on port 3000
     handle_path /* {
-        reverse_proxy localhost:8000
+        reverse_proxy localhost:3000
     }
     
     # Try files for clean URLs
