@@ -2,7 +2,6 @@
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/includes/analytics.php';
 
-// Analytics: Günlük Makro aracı ziyareti kaydet
 trackPageView('tool_makro', $_SERVER['REQUEST_URI']);
 
 $page_title = 'Günlük Makro Besin İhtiyacı Hesaplama';
